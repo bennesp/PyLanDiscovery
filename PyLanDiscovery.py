@@ -139,9 +139,9 @@ addLock = threading.Lock()
 if __name__ == '__main__':
   # Discover base
   for r in conf.route.routes:
-  if("192.168." in r[2][:8]):
-    ba = r[2].split(".")
-    base = ba[0]+"."+ba[1]+"."+ba[2]+"."
+    if("192.168." in r[2][:8]):
+      ba = r[2].split(".")
+      base = ba[0]+"."+ba[1]+"."+ba[2]+"."
 
   # GUI
   w = FinestraMain()
