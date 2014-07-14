@@ -20,20 +20,18 @@ On Ubuntu:
 
     sudo apt-get install python-scapy
 
-___
-Why doesn't it work?
+FAQ
 ---
+Why doesn't it work?
 - Did you install python-scapy ?
 - Did you run the script with sudo ? You should.
 - Is your subnet "192.168.1.*" ? If not, correct it editing the script.
 A feature to fix this will come soon.
 
 Why I need it to run with sudo ?
----
 - Because scapy, a module used, needs it to interact with low-level net.
 
 But it is full of bugs!
----
 - It's not a question :) And yes, it is an alpha.
 
 Changelog
