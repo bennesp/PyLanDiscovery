@@ -109,8 +109,8 @@ def discoverARP(liststore, updatePB):
   while True:
     packet = Ether(dst="ff:ff:ff:ff:ff:ff")/ARP(pdst=base+"0/24")
     ans,unans = srp(packet, timeout=3);
-    GObject.idle_add(updatePB)
     for snd,rcv in ans:
+      GObject.idle_add(updatePB)
       add(liststore, ["ARP",rcv[ARP].psrc, rcv[Ether].src])
     time.sleep(2)
     if(STOP_ARP):
@@ -232,7 +232,7 @@ class FinestraMain(Gtk.Window):
       b.set_label("Start ARP")
     else:
       STOP_ARP = False
-      thread.start_new_thread(discoverSniff, (w.liststore, w.updatePB2))
+      thread.start_new_thread(discoverARP, (w.liststore, w.updatePB2))
       b.set_label("Stop ARP")
 
   def button3_clicked(self, b):
