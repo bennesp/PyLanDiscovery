@@ -7,7 +7,7 @@ ARP and ICMP multithreading!
 Version 0.3a
 
 <p align="center">
-  <img src="http://imagizer.imageshack.us/v2/1280x1200q90/823/o67e.png" alt="v.0.3a" />
+  <img src="http://imageshack.com/a/img674/82/e32a51.png" alt="v.0.3a" />
 </p>
 
 This script let you discover all computers in your subnet, thanks to the
