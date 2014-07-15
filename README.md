@@ -4,10 +4,10 @@ PyLanDiscovery
 Discover the Computers in your LAN, thanks to Sniffing (Passive scan),
 ARP and ICMP multithreading!
 
-Version 0.2a
+Version 0.3a
 
 <p align="center">
-  <img src="http://imagizer.imageshack.us/v2/1280x1200q90/823/o67e.png" alt="v.0.2a" />
+  <img src="http://imagizer.imageshack.us/v2/1280x1200q90/823/o67e.png" alt="v.0.3a" />
 </p>
 
 This script let you discover all computers in your subnet, thanks to the
@@ -29,10 +29,6 @@ Why it doesn't work?
 
 - Did you install python-scapy ?
 - Did you run the script with sudo ? You should.
-
-- ~~Is your subnet "192.168.1.*" ? If not, correct it editing the script.~~
-~~A feature to fix this will come soon.~~
-(From 0.2a it detects subnet from its own)
 
 Why I need it to run with sudo ?
 

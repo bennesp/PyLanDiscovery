@@ -1,3 +1,13 @@
+Version 0.3a, 16 July 2014
+---
+- Added two ProgressBar to the GUI, one for ICMP (slower) and one for
+ARP+sniff modes.
+- Added buttons to enable/disable ICMP, ARP, and sniff
+- Methods ARP and ICMP disabled by default (they are too invasive)
+- Added statically "This PC" to the list, colored of green
+- Bugfix: auto-detect the interface, previously it was only "wlan0"
+- Removed debug useless comments
+
 Version 0.2a, 15 July 2014
 ---
 - Added a new scan method completely passive and very fast: Sniff
