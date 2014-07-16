@@ -1,3 +1,12 @@
+Version 0.4a, 16 July 2014
+---
+- Added vendor column
+- Code completely rewritten: ordered in classes and modules
+- Improved order and performance of code deleting many useless
+variables and threads
+- Bugfix: auto-detect subnet also in adding to liststore
+- Bugfix: buttons reaction fixed, first was too asynchronous
+
 Version 0.3a, 16 July 2014
 ---
 - Added two ProgressBar to the GUI, one for ICMP (slower) and one for

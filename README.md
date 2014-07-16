@@ -4,10 +4,10 @@ PyLanDiscovery
 Discover the Computers in your LAN, thanks to Sniffing (Passive scan),
 ARP and ICMP multithreading!
 
-Version 0.3a
+Version 0.4a
 
 <p align="center">
-  <img src="http://imageshack.com/a/img674/82/e32a51.png" alt="v.0.3a" />
+  <img src="http://imageshack.com/a/img674/2212/624727.png" alt="v.0.4a" />
 </p>
 
 This script let you discover all computers in your subnet, thanks to the
