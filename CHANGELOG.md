@@ -1,3 +1,13 @@
+Version 0.4b, 17 July 2014
+---
+- First beta release, pretty stable
+- Added IP sorting
+- Added check if sudo
+- Added now it colors with red IP that changes MAC
+- Bugfix: make the script runnable with ./script_name
+- Bugfix: now first column sorts the methods
+- ICMP ProgressBar improved
+
 Version 0.4a, 16 July 2014
 ---
 - Added vendor column

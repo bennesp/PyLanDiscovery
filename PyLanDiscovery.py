@@ -1,4 +1,6 @@
-import thread, logging
+#!/usr/bin/python2
+
+import logging, os
 from ARP import DiscoverARP
 from ICMP import DiscoverICMP
 from sniff import DiscoverSniff
@@ -7,7 +9,7 @@ from gi.repository import Gtk, GObject
 
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 conf.verb=0
-VERSION = "0.4a"
+VERSION = "0.4b"
 
 class ListStore(Gtk.ListStore):
   def contains(self, el, column):
@@ -38,7 +40,10 @@ class FinestraMain(Gtk.Window):
     self.grid = Gtk.Grid()
 
     self.liststore = ListStore(str, str, str, str, int)
-    treeview = Gtk.TreeView(model=self.liststore)
+    sorted_model = Gtk.TreeModelSort(model=self.liststore)
+    sorted_model.set_sort_column_id(1, Gtk.SortType.DESCENDING)
+    
+    treeview = Gtk.TreeView(model=sorted_model)
     renderer_text = Gtk.CellRendererText()
     column_method = Gtk.TreeViewColumn("Method", renderer_text, markup=0)
     column_ip = Gtk.TreeViewColumn("IP", renderer_text, markup=1)
@@ -72,6 +77,20 @@ class FinestraMain(Gtk.Window):
     self.grid.attach(self.progressbar1, 0, 9, 3, 1)
     self.grid.attach(self.progressbar2, 0, 10, 3, 1)
     self.add(self.grid)
+
+  def compare(self, model, row1, row2, user_data):
+    sort_column, _ = model.get_sort_column_id()
+    value1 = model.get_value(row1, sort_column)
+    value2 = model.get_value(row2, sort_column)
+    if(self.PC["IP"] in value1):
+      return -1
+    if(self.PC["IP"] in value2):
+      return 1
+    if int(value1.split(".")[3]) < int(value2.split(".")[3]):
+      print value1.split(".")[3]+"<"+value2.split(".")[3]
+      return -1
+    else:
+      return 1
 
   def get_pc_info(self):
     self.PC = {}
@@ -149,7 +168,7 @@ class FinestraMain(Gtk.Window):
     self.sniff.stop()
 
   """ Private method: Insert one packet in liststore """
-  def insert_packet(self, method, p):
+  def _insert_packet(self, method, p):
     # if there isn't layer IP in p, quit
     if IP not in p: return False
     # if is not a local IP, quit
@@ -168,27 +187,32 @@ class FinestraMain(Gtk.Window):
       self.liststore[t][2] = discoverMACOf(self.liststore[t][1])
       self.liststore[t][3] = vendorOf(self.liststore[t][2])
 
+    if(Ether in p) and (p[Ether].src is not None) and (p[Ether].src!="00:00:00:00:00:00") and (self.liststore[t][2]!="") and (p[Ether].src not in self.liststore[t][2]):
+      print "From "+self.liststore[t][2]+" to "+p[Ether].src
+      self.liststore[t][2] = "<span color=\"red\">"+p[Ether].src+"</span>"
+      self.liststore[t][3] = vendorOf(self.liststore[t][2])
+
     row = self.liststore[t][:]
     self.liststore[t][4] = row[4]+1
     for el in self.liststore[t][0].split(","):
       if (method==el) or ("This PC"==el):
         return True
-    self.liststore[t][0] = row[0]+","+method
+    self.liststore[t][0] = ','.join(map(str, sorted((row[0]+","+method).split(","))))
     return True
 
   """ Insert many packets in liststore """
   def insert(self, method, packets):
     if method == "ICMP":
       if(self.icmp.isRunning==False): return False
-      self.progressbar1.set_text("ICMP: " + packets[0][IP].dst)
       cur = self.progressbar1.get_fraction()
+      self.progressbar1.set_text("ICMP: " + packets[0][IP].dst + " ("+str(int(256*cur))+"/255) ")
       if(cur + 1.0/256)<1.0:
         self.progressbar1.set_fraction(cur+1.0/256)
       else:
         self.progressbar1.set_fraction(0)
       p = packets[1]
       if p is None: return False
-      self.insert_packet(method, p)
+      self._insert_packet(method, p)
     elif method == "ARP":
       if(self.arp.isRunning==False): return False
       self.progressbar2.set_text(method)
@@ -196,15 +220,26 @@ class FinestraMain(Gtk.Window):
       for snd,rcv in packets:
         if ARP not in rcv: return False
         rcv=rcv/IP(src=rcv[ARP].psrc)
-        self.insert_packet(method, rcv)
+        self._insert_packet(method, rcv)
     elif method == "sniff":
       if(self.sniff.isRunning==False): return False
       self.progressbar2.set_text(method)
       self.progressbar2.pulse()
-      self.insert_packet(method, packets)
+      self._insert_packet(method, packets)
+    else:
+      return False
+    return True
 
 def main():
   # GUI
+  if(os.getuid()!=0):
+    dialog = Gtk.MessageDialog(None, 0, Gtk.MessageType.ERROR,
+      Gtk.ButtonsType.OK, "Error")
+    dialog.format_secondary_text("You have to run this script with sudo, scapy needs it.")
+    dialog.run()
+    dialog.destroy()
+    exit(1)
+
   w = FinestraMain()
   w.show_all()
   w.start()

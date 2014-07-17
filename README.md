@@ -4,7 +4,7 @@ PyLanDiscovery
 Discover the Computers in your LAN, thanks to Sniffing (Passive scan),
 ARP and ICMP multithreading!
 
-Version 0.4a
+Version 0.4b
 
 <p align="center">
   <img src="http://imageshack.com/a/img674/2212/624727.png" alt="v.0.4a" />
