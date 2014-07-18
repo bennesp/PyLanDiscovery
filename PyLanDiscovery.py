@@ -37,7 +37,8 @@ class FinestraMain(Gtk.Window):
     Gtk.Window.__init__(self, title="PyLanDiscovery v."+VERSION)
     self.connect("delete-event", Gtk.main_quit)
 
-    self.grid = Gtk.Grid()
+    grid1 = Gtk.Grid()
+    grid2 = Gtk.Grid()
 
     self.liststore = ListStore(str, str, str, str, int)
     sorted_model = Gtk.TreeModelSort(model=self.liststore)
@@ -56,12 +57,12 @@ class FinestraMain(Gtk.Window):
     treeview.append_column(column_ven)
     treeview.append_column(column_pn)
 
-    self.button1 = Gtk.Button("Start ICMP")
-    self.button2 = Gtk.Button("Start ARP")
-    self.button3 = Gtk.Button("Stop sniff")
-    self.button1.connect("clicked", self.button1_clicked)
-    self.button2.connect("clicked", self.button2_clicked)
-    self.button3.connect("clicked", self.button3_clicked)
+    button1 = Gtk.Button("Start ICMP")
+    button2 = Gtk.Button("Start ARP")
+    button3 = Gtk.Button("Stop sniff")
+    button1.connect("clicked", self.button1_clicked)
+    button2.connect("clicked", self.button2_clicked)
+    button3.connect("clicked", self.button3_clicked)
 
     self.progressbar1 = Gtk.ProgressBar()
     self.progressbar1.set_text("ICMP disabled")
@@ -70,13 +71,18 @@ class FinestraMain(Gtk.Window):
     self.progressbar2.set_text("Scanning...")
     self.progressbar2.set_show_text(True)
 
-    self.grid.attach(treeview, 0, 0, 3, 8)
-    self.grid.attach(self.button1, 0, 8, 1, 1)
-    self.grid.attach(self.button2, 1, 8, 1, 1)
-    self.grid.attach(self.button3, 2, 8, 1, 1)
-    self.grid.attach(self.progressbar1, 0, 9, 3, 1)
-    self.grid.attach(self.progressbar2, 0, 10, 3, 1)
-    self.add(self.grid)
+    grid1.attach(treeview, 0, 0, 3, 7)
+    grid1.attach(button1, 0, 8, 1, 1)
+    grid1.attach(button2, 1, 8, 1, 1)
+    grid1.attach(button3, 2, 8, 1, 1)
+    grid1.attach(self.progressbar1, 0, 9, 3, 1)
+    grid1.attach(self.progressbar2, 0, 10, 3, 1)
+
+    nb = Gtk.Notebook()
+    nb.append_page(grid1, Gtk.Label(label="Scan Lan"))
+
+    self.add(nb)
+    self.show_all()
 
   def compare(self, model, row1, row2, user_data):
     sort_column, _ = model.get_sort_column_id()
@@ -241,7 +247,6 @@ def main():
     exit(1)
 
   w = FinestraMain()
-  w.show_all()
   w.start()
   GObject.threads_init()
   Gtk.main()
